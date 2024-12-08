@@ -1,5 +1,3 @@
-import java.util.function.Consumer;
-
 public class GridDecorator implements Grid {
     private final Grid grid;
 
@@ -18,7 +16,4 @@ public class GridDecorator implements Grid {
         return grid.contains(c);
     }
 
-    @Override public void forEach(Consumer<Coord> coordConsumer) {
-        grid.forEach(coordConsumer);
-    }
 }

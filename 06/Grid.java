@@ -1,5 +1,3 @@
-import java.util.function.Consumer;
-
 public interface Grid {
     boolean hasObstruction(Coord coord);
 
@@ -12,7 +10,5 @@ public interface Grid {
 
         return new GridWithExtraObstruction(this, newObstruction);
     }
-
-    void forEach(Consumer<Coord> coordConsumer);
 
 }

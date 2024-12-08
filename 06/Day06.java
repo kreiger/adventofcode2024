@@ -13,7 +13,7 @@ public class Day06 {
         System.out.println(visited.size());
 
         Set<Coord> newObstructions = new HashSet<>();
-        grid.forEach((Coord c) -> {
+        visited.forEach((Coord c) -> {
             Set<Guard> loopVisited = new HashSet<>();
             if (grid.guard.coord().equals(c)) {
                 return;

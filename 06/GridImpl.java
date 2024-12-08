@@ -43,13 +43,4 @@ public class GridImpl implements Grid {
         return c.inside(width, height);
     }
 
-    @Override public void forEach(Consumer<Coord> coordConsumer) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Coord c = new Coord(x, y);
-                coordConsumer.accept(c);
-            }
-        }
-    }
-
 }
