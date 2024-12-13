@@ -1,26 +1,23 @@
 package day12;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import static day12.Vector.v;
 
 public enum Direction {
-    UP(0, -1),
-    RIGHT(1, 0),
-    DOWN(0, 1),
-    LEFT(-1, 0);
+    NORTH(v(0, -1)),
+    EAST(v(1, 0)),
+    SOUTH(v(0, 1)),
+    WEST(v(-1, 0));
 
-    final int x;
-    final int y;
+    final Vector v;
 
-    Direction(int x, int y) {
-        this.x = x;
-        this.y = y;
+    Direction(Vector v) {
+        this.v = v;
     }
 
-    static Stream<Direction> directions() {
-        return Arrays.stream(values());
+    Direction turnLeft() {
+        Direction[] values = values();
+        return values[(ordinal() + 3) % values.length];
     }
-
     Direction turnRight() {
         Direction[] values = values();
         return values[(ordinal() + 1) % values.length];

@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 public class GridImpl implements Grid {
     int width;
     int height;
-    private HashMap<Pos, PlotImpl> plants = new HashMap<>();
+    private HashMap<Vector, Plot> plants = new HashMap<>();
 
     GridImpl(Path path) throws IOException {
         BufferedReader br = Files.newBufferedReader(path);
@@ -19,9 +19,8 @@ public class GridImpl implements Grid {
             int x = 0;
             for (; x < line.length(); x++) {
                 char plant = line.charAt(x);
-                int finalX = x;
-                int finalY = y;
-                plants.put(new Pos(x, y), new PlotImpl(this, finalX, finalY, plant));
+                Vector pos = new Vector(x, y);
+                plants.put(pos, new Plot(this, pos, plant));
             }
             if (y == 0) width = x;
         }
@@ -32,7 +31,7 @@ public class GridImpl implements Grid {
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                sb.append(plants.get(new Pos(x, y)).plant());
+                sb.append(plants.get(new Vector(x, y)).plant());
             }
             sb.append('\n');
         }
@@ -43,17 +42,8 @@ public class GridImpl implements Grid {
         plants.forEach((pos, plot) -> consumer.accept(plot));
     }
 
-    @Override public int getWidth() {
-        return width;
-    }
-
-    @Override public int getHeight() {
-        return height;
-    }
-
     @Override
-    public Plot get(Pos pos) {
+    public Plot get(Vector pos) {
         return plants.get(pos);
     }
-
 }
