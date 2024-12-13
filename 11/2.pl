@@ -19,7 +19,13 @@ sub recurse {
     my ($depth, $stone) = @_;
     return 1 unless $depth--;
 
-    return $cache{$depth}{$stone} ||= recurse2($depth, $stone);
+    my $cache = $cache{$stone}[$depth];
+    my $cached = $cache->{value};
+    if ($cached) {
+       $cache->{hits}++;
+       return $cached;
+    }
+    return $cache{$stone}[$depth]{value} ||= recurse2($depth, $stone);
 }
 
 sub recurse2{
@@ -41,4 +47,7 @@ for (@input) {
     $total += $count;
     say "$_: $count";
 }
+
+say Dumper({$_ => $cache{$_}}) for sort {$a <=> $b}  keys %cache;
+
 say $total;
