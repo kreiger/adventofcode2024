@@ -8,7 +8,7 @@ use Vector2D;
 use Data::Dumper;
 use List::Util qw( product );
 
-my $seconds = shift;
+my $seconds = 100;
 
 my ($xmax, $ymax) = (0,0);
 

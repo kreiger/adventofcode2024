@@ -9,6 +9,7 @@ use overload
     '+'  => \&add,
     '-' =>  \&subtract,
     '*' =>  \&multiply,
+    '%' =>  \&mod,
     'neg' => sub { subtract(V(0,0), shift); } ,
     '==' => \&eq,
     '""' => sub { my $v = shift; "($v->[0] $v->[1])" }
@@ -41,8 +42,7 @@ sub y {
 
 sub add {
     my ($v, $w) = @_;
-    my $r = V($v->[0] + $w->[0], $v->[1] + $w->[1]);
-    return $r;
+    return V($v->[0] + $w->[0], $v->[1] + $w->[1]);
 }
 
 sub subtract {
@@ -55,6 +55,11 @@ sub multiply {
     my $v = shift;
     my $s = shift;
     return V($v->[0] * $s, $v->[1] * $s);    
+}
+
+sub mod {
+    my ($v, $w) = @_;
+    return V($v->[0] % $w->[0], $v->[1] % $w->[1]);
 }
 
 sub eq {
