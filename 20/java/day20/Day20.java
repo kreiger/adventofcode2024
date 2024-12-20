@@ -5,8 +5,6 @@ import day20.astar.Visit;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -21,12 +19,12 @@ public class Day20 {
     public static void main(String[] args) throws IOException {
         GridImpl grid = new GridImpl(Path.of("20/" + args[0]));
         System.out.println(grid);
-        new Day20(grid).run();
+        new Day20(grid).part1();
 
     }
 
-    private void run() {
-        Racer start = new Racer(grid.start);
+    private void part1() {
+        Racer start = new Racer(grid.start, null);
         AStar aStar = new AStar();
         Visit<Racer> shortest = aStar.shortest(start, new Day20Strategy(grid, false));
         int best = shortest.accumulatedScore;

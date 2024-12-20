@@ -47,6 +47,13 @@ public class GridImpl implements Grid {
     }
 
     public String toString(Visit<Racer> visits) {
+        Cheat cheat = null;
+        for (Visit<Racer> visit = visits; visit != null; visit = visit.parent) {
+            if (visit.value.cheat() != null) {
+                cheat = visit.value.cheat();
+                break;
+            }
+        }
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -56,6 +63,8 @@ public class GridImpl implements Grid {
                     c = 'S';
                 } else if (v.equals(end)) {
                     c = 'E';
+                } else if (cheat != null && cheat.contains(v)) {
+                    c = '1';
                 } else if (walls.contains(v)) {
                     c = '#';
                 } else {

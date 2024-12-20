@@ -32,8 +32,11 @@ public class Day20Strategy implements Strategy<Racer> {
         List<Edge<Racer>> list = new ArrayList<>();
         for (Vector v : getAdjacent(visit)) {
             if (grid.contains(v)) {
+                Racer racer = visit.value;
                 if (grid.isEmpty(v)) {
-                    list.add(new Edge<>(1, new Racer(v)));
+                    list.add(new Edge<>(1, racer.moveToEmpty(v)));
+                } else if (cheat && racer.cheatAvailable()) {
+                    list.add(new Edge<>(1, racer.moveToWall(v)));
                 }
             }
         }
