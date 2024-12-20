@@ -4,20 +4,16 @@ import day20.astar.Edge;
 import day20.astar.Strategy;
 import day20.astar.Visit;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static day20.Vector.v;
-import static java.lang.Math.abs;
 
 public class Day20Strategy implements Strategy<Racer> {
+    public static final List<Vector> DIAMOND = diamond();
     private final Grid grid;
-    private final boolean cheat;
 
-    public Day20Strategy(Grid grid, boolean cheat) {
+    public Day20Strategy(Grid grid) {
         this.grid = grid;
-        this.cheat = cheat;
     }
 
     @Override
@@ -28,37 +24,47 @@ public class Day20Strategy implements Strategy<Racer> {
         } else return false;
     }
 
-    @Override public Collection<Edge<Racer>> outgoingEdges(Visit<Racer> visit) {
+    @Override public Collection<Edge<Racer>> outgoingEdges(Visit<Racer> visit, Set<Racer> visited) {
         List<Edge<Racer>> list = new ArrayList<>();
+        Racer racer = visit.value;
         for (Vector v : getAdjacent(visit)) {
             if (grid.contains(v)) {
-                if (grid.isEmpty(v)) {
-                    list.add(new Edge<>(1, new Racer(v)));
+                boolean empty = grid.isEmpty(v);
+                if (empty) {
+                    list.add(new Edge<>(1, racer.moveToEmpty(1, v)));
                 }
             }
         }
+
         return list;
     }
 
-    private static Collection<Vector> getAdjacent(Visit<Racer> visit) {
-        Visit<Racer> parent = visit.parent;
-        Racer racer = visit.value;
-        if (parent == null) {
-            return List.of(
-                    racer.pos().add(v(0, -1)),
-                    racer.pos().add(v(1, 0)),
-                    racer.pos().add(v(0, 1)),
-                    racer.pos().add(v(-1, 0)));
+    static List<Vector> diamond() {
+        List<Vector> diamond = new ArrayList<>();
+        // Find all the empty squares within Manhattan distance 20
+        for (int d = 1; d <= 20; d++) {
+            for (int x = 0; x < d; x++) {
+                int y = d - x;
+                Vector n = v(x, -y);
+                for (int dir = 0; dir < 4; dir++) {
+                    diamond.add(n);
+                    n = n.turnRight();
+                }
+            }
         }
-        Vector direction = racer.pos().minus(parent.value.pos());
+        return diamond.reversed();
+    }
+
+    private static Collection<Vector> getAdjacent(Visit<Racer> visit) {
+        Racer racer = visit.value;
         return List.of(
-                racer.pos().add(direction),
-                racer.pos().add(direction.turnLeft()),
-                racer.pos().add(direction.turnRight()));
+                racer.pos().add(v(0, -1)),
+                racer.pos().add(v(1, 0)),
+                racer.pos().add(v(0, 1)),
+                racer.pos().add(v(-1, 0)));
     }
 
     @Override public int heuristic(Racer value) {
-        Vector diff = grid.end().minus(value.pos());
-        return abs(diff.x()) + abs(diff.y());
+        return grid.end().minus(value.pos()).manhattan();
     }
 }

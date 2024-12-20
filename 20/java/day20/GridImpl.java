@@ -6,10 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GridImpl implements Grid {
+    static final String CHEAT = "0123456789ABCDEFGHIJK";
+
     int width;
     int height;
     Vector start;
@@ -47,12 +48,23 @@ public class GridImpl implements Grid {
     }
 
     public String toString(Visit<Racer> visits) {
+        Map<Vector, Character> cheats = new HashMap<>();
+        if (visits != null) {
+            Cheat cheat = visits.value.cheat();
+            if (cheat != null) {
+                cheats.put(cheat.end(), CHEAT.charAt(cheat.end().minus(cheat.start()).manhattan()));
+                cheats.put(cheat.start(), '0');
+            }
+        }
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector v = new Vector(x, y);
                 char c;
-                if (v.equals(start)) {
+                Character cheatChar = cheats.get(v);
+                if (cheatChar != null) {
+                    c = cheatChar;
+                } else if (v.equals(start)) {
                     c = 'S';
                 } else if (v.equals(end)) {
                     c = 'E';

@@ -1,6 +1,9 @@
 package day20;
 
 import java.util.Comparator;
+import java.util.List;
+
+import static java.lang.Math.*;
 
 public record Vector(int x, int y) implements Comparable<Vector> {
 
@@ -11,6 +14,10 @@ public record Vector(int x, int y) implements Comparable<Vector> {
     }
 
     Vector add(Vector other) {
+        return v(x+other.x, y+other.y);
+    }
+
+    Vector plus(Vector other) {
         return v(x+other.x, y+other.y);
     }
 
@@ -36,4 +43,16 @@ public record Vector(int x, int y) implements Comparable<Vector> {
         return v(x-other.x, y-other.y);
     }
 
+    public int manhattan() {
+        return abs(x) + abs(y);
+    }
+
+    public List<Vector> directions() {
+        return List.of(
+                v(0, -1),
+                v(1, 0),
+                v(0, 1),
+                v(-1, 0)
+        );
+    }
 }

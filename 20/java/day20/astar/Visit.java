@@ -14,7 +14,9 @@ public final class Visit<T> implements Comparable<Visit<T>> {
     }
 
     @Override public int compareTo(Visit<T> o) {
-        return Integer.compare(accumulatedScore, o.accumulatedScore);
+        int compare = Integer.compare(accumulatedScore, o.accumulatedScore);
+
+        return compare;
     }
 
     @Override
